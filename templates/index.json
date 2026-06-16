@@ -9,45 +9,9 @@
  */
 {
   "sections": {
-    "gift_guide_Gn9E63": {
-      "type": "gift-guide",
-      "blocks": {
-        "button_J9GK8f": {
-          "type": "button",
-          "settings": {
-            "button_text": "CHOOSE GIFT",
-            "button_link": "",
-            "button_style": "primary"
-          }
-        }
-      },
-      "block_order": [
-        "button_J9GK8f"
-      ],
-      "disabled": true,
-      "name": "Gift Guide",
-      "settings": {
-        "brand_label": "TISSO VISON",
-        "heading": "<p>The Gift Guide</p>",
-        "subheading": "<p>Find the ideal gift for your loved ones.</p>",
-        "description": "<p>Discover joy. Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
-        "image_1": "shopify://shop_images/autumn-photographer-taking-picture.jpg",
-        "section_width": 1200,
-        "section_gap": 60,
-        "background_color": "#ffffff",
-        "text_color": "#000000",
-        "button_primary_bg": "#FFE500",
-        "button_primary_text": "#000000",
-        "button_secondary_bg": "#000000",
-        "button_secondary_text": "#ffffff",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "padding_left": 20,
-        "padding_right": 20
-      }
-    }
+    
   },
   "order": [
-    "gift_guide_Gn9E63"
+    
   ]
 }
