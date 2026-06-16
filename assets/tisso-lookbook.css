@@ -428,6 +428,17 @@
   display: block;
 }
 
+.tlb-modal__notice-link {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.tlb-modal__notice-link:hover {
+  opacity: 0.8;
+}
+
 /* ---------- Add to cart ---------- */
 .tlb-modal__atc-wrap {
   padding: 16px 20px 24px;

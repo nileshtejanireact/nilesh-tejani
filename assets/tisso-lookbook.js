@@ -365,7 +365,7 @@
   /* ── Notice ─────────────────────────────────────────────────── */
   function showNotice(msg, type) {
     if (!noticeEl) return;
-    noticeEl.textContent = msg;
+    noticeEl.innerHTML = msg;
     noticeEl.className = 'tlb-modal__notice tlb-modal__notice--' + type;
   }
   function clearNotice() {
