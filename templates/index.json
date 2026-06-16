@@ -9,9 +9,12 @@
  */
 {
   "sections": {
-    
+    "gift_guide_Gn9E63": {
+      "type": "gift-guide",
+      "settings": {}
+    }
   },
   "order": [
-    
+    "gift_guide_Gn9E63"
   ]
 }
