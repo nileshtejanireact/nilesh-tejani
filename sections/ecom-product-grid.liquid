@@ -1,0 +1,393 @@
+{% comment %}
+  sections/lookbook-grid.liquid
+  Shopify Dawn OS2.0 — Lookbook Grid Section
+  Requirements: pure Liquid, CSS, Vanilla JS | Dawn standards | Accessible
+{% endcomment %}
+
+{{ 'lookbook-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign desktop_cols = section.settings.desktop_columns | default: 3
+  assign mobile_cols  = section.settings.mobile_columns  | default: 2
+  assign grid_gap     = section.settings.grid_gap        | default: 16
+-%}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    --lookbook-desktop-cols: {{ desktop_cols }};
+    --lookbook-mobile-cols:  {{ mobile_cols }};
+    --lookbook-gap:          {{ grid_gap }}px;
+    --lookbook-section-padding-top:    {{ section.settings.padding_top    | default: 36 }}px;
+    --lookbook-section-padding-bottom: {{ section.settings.padding_bottom | default: 36 }}px;
+  }
+</style>
+
+<section
+  class="lookbook-grid color-{{ section.settings.color_scheme }} gradient"
+  id="lookbook-grid-{{ section.id }}"
+  aria-label="Lookbook"
+>
+  <div class="lookbook-grid__inner">
+
+    {%- if section.blocks.size > 0 -%}
+
+      <ul
+        class="lookbook-grid__wrapper"
+        role="list"
+        aria-label="Lookbook grid"
+      >
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'lookbook_item' -%}
+
+            {%- liquid
+              assign block_image   = block.settings.image
+              assign block_product = all_products[block.settings.product]
+              assign product_data  = nil
+
+              if block_product != blank
+                assign product_json_id              = block_product.id
+                assign product_json_title           = block_product.title | json
+                assign product_json_description     = block_product.description | json
+                assign product_json_price           = block_product.price
+                assign product_json_price_formatted = block_product.price | money | json
+                assign product_json_featured_image  = ''
+                if block_product.featured_image
+                  assign product_json_featured_image = block_product.featured_image | image_url: width: 800
+                endif
+              endif
+            -%}
+
+            {%- comment %} Build product JSON payload {%- endcomment %}
+            {%- if block_product != blank -%}
+              {%- capture product_json -%}
+                {
+                  "id": {{ block_product.id }},
+                  "title": {{ block_product.title | json }},
+                  "description": {{ block_product.description | json }},
+                  "featured_image": {{ product_json_featured_image | json }},
+                  "price": {{ block_product.price }},
+                  "price_formatted": {{ block_product.price | money | json }},
+                  "options_with_values": [
+                    {%- for option in block_product.options_with_values -%}
+                      {
+                        "name": {{ option.name | json }},
+                        "position": {{ option.position }},
+                        "values": {{ option.values | json }}
+                      }{%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                  ],
+                  "variants": [
+                    {%- for variant in block_product.variants -%}
+                      {
+                        "id": {{ variant.id }},
+                        "title": {{ variant.title | json }},
+                        "price": {{ variant.price }},
+                        "price_formatted": {{ variant.price | money | json }},
+                        "available": {{ variant.available }},
+                        "option1": {{ variant.option1 | json }},
+                        "option2": {{ variant.option2 | json }},
+                        "option3": {{ variant.option3 | json }},
+                        "featured_image": {{ variant.featured_image.src | default: '' | json }}
+                      }{%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                  ]
+                }
+              {%- endcapture -%}
+            {%- endif -%}
+
+            {%- liquid
+              assign card_image_url = ''
+              if block_image
+                assign card_image_url = block_image | image_url: width: 800
+              elsif block_product != blank and block_product.featured_image
+                assign card_image_url = block_product.featured_image | image_url: width: 800
+              endif
+
+              assign img_sizes = '(min-width: 990px) calc((100vw - 3rem) / ' | append: desktop_cols | append: '), (min-width: 750px) calc((100vw - 2rem) / 2), calc((100vw - 1.5rem) / ' | append: mobile_cols | append: ')'
+              assign img_widths = '375,550,800'
+
+              assign card_alt = ''
+              if block_image and block_image.alt != blank
+                assign card_alt = block_image.alt
+              elsif block_product != blank
+                assign card_alt = block_product.title
+              endif
+
+              assign featured_alt = ''
+              if block_product != blank and block_product.featured_image
+                assign featured_alt = block_product.featured_image.alt | default: block_product.title
+              endif
+            -%}
+
+            <li
+              class="lookbook-card-wrapper"
+              {{ block.shopify_attributes }}
+            >
+              <button
+                type="button"
+                class="lookbook-card"
+                aria-label="{% if block_product != blank %}View {{ block_product.title }}{% else %}View item{% endif %}"
+                {%- if block_product != blank -%}
+                  data-product="{{ product_json | strip | escape }}"
+                {%- endif -%}
+                data-image="{{ card_image_url | escape }}"
+                {%- if block_product == blank -%}disabled{%- endif -%}
+              >
+                {%- if block_image != blank -%}
+                  {{
+                    block_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: "lazy",
+                      class: "lookbook-card__image",
+                      widths: img_widths,
+                      sizes: img_sizes,
+                      alt: card_alt
+                  }}
+                {%- elsif block_product != blank and block_product.featured_image -%}
+                  {{
+                    block_product.featured_image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: "lazy",
+                      class: "lookbook-card__image",
+                      widths: img_widths,
+                      sizes: img_sizes,
+                      alt: featured_alt
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'lookbook-card__image lookbook-card__placeholder' }}
+                {%- endif -%}
+              </button>
+            </li>
+
+          {%- endif -%}
+        {%- endfor -%}
+
+      </ul>
+
+    {%- else -%}
+
+      {%- comment %} Editor empty state {%- endcomment %}
+      {%- if request.design_mode -%}
+        <div class="lookbook-grid__empty-state">
+          <p>Add lookbook items using the theme editor.</p>
+        </div>
+      {%- endif -%}
+
+    {%- endif -%}
+
+  </div>{%- comment %} /.lookbook-grid__inner {%- endcomment %}
+</section>
+
+{%- comment %} ============================================================
+  MODAL — rendered once per page, shared across all lookbook sections.
+  Guard against duplicate rendering with a Liquid variable.
+============================================================ {%- endcomment %}
+
+{%- unless lookbook_modal_rendered -%}
+  {%- assign lookbook_modal_rendered = true -%}
+
+  <div
+    id="lookbook-modal"
+    class="lookbook-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Product details"
+    aria-hidden="true"
+  >
+    {%- comment %} Overlay {%- endcomment %}
+    <div class="lookbook-modal__overlay" aria-hidden="true"></div>
+
+    {%- comment %} Content panel {%- endcomment %}
+    <div class="lookbook-modal__content">
+
+      {%- comment %} Left — product image {%- endcomment %}
+      <div class="lookbook-modal__image-pane" aria-hidden="true">
+        <img
+          class="lookbook-modal__image"
+          src=""
+          alt=""
+          loading="lazy"
+          width="400"
+          height="533"
+        >
+        <span class="lookbook-modal__image-placeholder">
+          {%- comment %} placeholder icon — hidden when src is set {%- endcomment %}
+        </span>
+      </div>
+
+      {%- comment %} Right — product info {%- endcomment %}
+      <div class="lookbook-modal__body">
+
+        <h2 class="lookbook-modal__title"></h2>
+
+        <p class="lookbook-modal__price" aria-live="polite" aria-atomic="true"></p>
+
+        <div
+          class="lookbook-modal__description"
+          aria-label="Product description"
+        ></div>
+
+        {%- comment %} Variant selectors — built by JS {%- endcomment %}
+        <div
+          class="lookbook-modal__variants"
+          aria-label="Product options"
+        ></div>
+
+        <p
+          class="lookbook-modal__availability"
+          aria-live="polite"
+          aria-atomic="true"
+        ></p>
+
+        {%- comment %} Notice (error / success) {%- endcomment %}
+        <p class="lookbook-modal__notice" role="alert" aria-live="polite"></p>
+
+        {%- comment %} Add to cart {%- endcomment %}
+        <button
+          type="button"
+          class="lookbook-modal__atc"
+          aria-label="Add to cart"
+          disabled
+        >
+          <span class="lookbook-modal__atc-text">Add to Cart</span>
+          <svg
+            class="lookbook-modal__atc-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+
+      </div>{%- comment %} /.lookbook-modal__body {%- endcomment %}
+
+      {%- comment %} Close button — positioned absolute, visible over both panes {%- endcomment %}
+      <button
+        type="button"
+        class="lookbook-modal__close"
+        aria-label="Close"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+    </div>{%- comment %} /.lookbook-modal__content {%- endcomment %}
+  </div>{%- comment %} /#lookbook-modal {%- endcomment %}
+
+{%- endunless -%}
+
+<script src="{{ 'lookbook-grid.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Lookbook Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap (px)",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lookbook_item",
+      "name": "Lookbook Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook Grid",
+      "blocks": [
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

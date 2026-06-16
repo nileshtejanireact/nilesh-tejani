@@ -1,0 +1,301 @@
+<section
+  class="gift-hero color-{{ section.settings.color_scheme }}"
+  style="
+    --hero-height: {{ section.settings.desktop_height }}px;
+    --hero-height-mobile: {{ section.settings.mobile_height }}px;
+  "
+>
+
+  {% if section.settings.hero_image != blank %}
+    <div class="gift-hero__background">
+
+      {{
+        section.settings.hero_image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          class: 'gift-hero__image'
+      }}
+
+    </div>
+  {% endif %}
+
+  <div class="page-width">
+
+    <div class="gift-hero__content">
+
+      {% for block in section.blocks %}
+
+        {% case block.type %}
+
+          {% when 'heading' %}
+            <h1
+              class="gift-hero__heading"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.heading }}
+            </h1>
+
+          {% when 'text' %}
+            <div
+              class="gift-hero__text rte"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.text }}
+            </div>
+
+          {% when 'button' %}
+            <div
+              class="gift-hero__button-desktop"
+              {{ block.shopify_attributes }}
+            >
+              <a href="{{ block.settings.link }}" class="button">
+                {{ block.settings.label }}
+              </a>
+            </div>
+
+        {% endcase %}
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+  <div class="gift-hero__mobile-image">
+
+    {% if section.settings.hero_image != blank %}
+      {{
+        section.settings.hero_image
+        | image_url: width: 1200
+        | image_tag:
+          loading: 'lazy',
+          class: 'gift-hero__mobile-artwork'
+      }}
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.type == 'button' %}
+        <div class="gift-hero__button-mobile">
+
+          <a
+            href="{{ block.settings.link }}"
+            class="button"
+          >
+            {{ block.settings.label }}
+          </a>
+
+        </div>
+      {% endif %}
+    {% endfor %}
+
+  </div>
+
+</section>
+
+<style>
+
+.gift-hero{
+  position:relative;
+  min-height:var(--hero-height);
+  overflow:hidden;
+}
+
+.gift-hero__background{
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+
+.gift-hero__image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.gift-hero .page-width{
+  position:relative;
+  z-index:2;
+}
+
+.gift-hero__content{
+  max-width:520px;
+  padding:120px 0;
+}
+
+.gift-hero__heading{
+  margin:0 0 24px;
+  font-size:clamp(4rem,7vw,8rem);
+  line-height:1;
+}
+
+.gift-hero__text{
+  margin-bottom:32px;
+  font-size:1.8rem;
+  line-height:1.7;
+}
+
+.gift-hero__button-desktop{
+  display:block;
+}
+
+.gift-hero__mobile-image{
+  display:none;
+}
+
+@media screen and (max-width:749px){
+
+  .gift-hero{
+    min-height:auto;
+  }
+
+  .gift-hero__background{
+    display:none;
+  }
+
+  .gift-hero__content{
+    max-width:100%;
+    padding:40px 0 20px;
+    text-align:center;
+  }
+
+  .gift-hero__heading{
+    font-size:4.8rem;
+  }
+
+  .gift-hero__text{
+    font-size:1.6rem;
+  }
+
+  .gift-hero__button-desktop{
+    display:none;
+  }
+
+  .gift-hero__mobile-image{
+    display:block;
+    position:relative;
+    margin-top:20px;
+    padding-bottom:40px;
+  }
+
+  .gift-hero__mobile-artwork{
+    width:100%;
+    display:block;
+  }
+
+  .gift-hero__button-mobile{
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translate(-50%,50%);
+    z-index:5;
+  }
+
+  .gift-hero__button-mobile .button{
+    min-width:220px;
+  }
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Gift Hero",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 500,
+      "max": 1200,
+      "step": 20,
+      "default": 800,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 400,
+      "max": 1000,
+      "step": 10,
+      "default": 650,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "The Gift Guide"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Hero",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

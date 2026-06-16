@@ -1,0 +1,1229 @@
+<style>
+    /* ==========================================================
+   tisso-lookbook.css
+   Pixel-perfect to Figma: lookbook grid + product modal
+   ========================================================== */
+
+/* ---------- Reset ---------- */
+.tlb *,
+.tlb *::before,
+.tlb *::after,
+.tlb-modal *,
+.tlb-modal *::before,
+.tlb-modal *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   SECTION
+   ========================================================== */
+.tlb {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #fff;
+  padding: 60px 0 80px;
+}
+
+/* ---------- Heading ---------- */
+.tlb__heading {
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: #111;
+  text-align: center;
+  margin: 0 0 36px;
+  padding: 0 24px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+.tlb__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--tlb-desktop-cols, 3), 1fr);
+  gap: var(--tlb-gap, 4px);
+}
+
+/* ---------- Card ---------- */
+.tlb__item {
+  position: relative;
+  overflow: hidden;
+}
+
+.tlb__card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+
+.tlb__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tlb__card:hover .tlb__card-img {
+  transform: scale(1.04);
+}
+
+.tlb__card-placeholder {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+/* ---------- Hotspot + button ---------- */
+.tlb__hotspot {
+  position: absolute;
+  /* Default position — overrideable via block settings in future */
+  bottom: 28%;
+  left: 30%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1;
+  color: #111;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.tlb__hotspot:hover {
+  background: #fff;
+  border-color: #111;
+  transform: scale(1.1);
+}
+
+.tlb__hotspot:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.tlb__empty {
+  text-align: center;
+  color: #888;
+  padding: 40px;
+  font-size: 15px;
+}
+
+/* ==========================================================
+   MODAL OVERLAY
+   ========================================================== */
+.tlb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.tlb-modal[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tlb-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+/* ==========================================================
+   MODAL PANEL
+   ========================================================== */
+.tlb-modal__panel {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(10px) scale(0.985);
+  transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.tlb-modal[aria-hidden="false"] .tlb-modal__panel {
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Close button ---------- */
+.tlb-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tlb-modal__close:hover svg path {
+  stroke: #555;
+}
+
+.tlb-modal__close:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+/* ---------- Inner layout: image left + body right ---------- */
+.tlb-modal__inner {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  padding: 24px 24px 24px 20px;
+  align-items: start;
+}
+
+/* ---------- Image ---------- */
+.tlb-modal__img-wrap {
+  width: 140px;
+  height: 175px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.tlb-modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* ---------- Body ---------- */
+.tlb-modal__body {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tlb-modal__title {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #111;
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.tlb-modal__price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.tlb-modal__desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #444;
+  margin: 0;
+}
+
+.tlb-modal__desc p {
+  margin: 0 0 4px;
+}
+
+/* ---------- Options section (below the image/body grid) ---------- */
+.tlb-modal__options {
+  grid-column: 1 / -1;
+  padding: 0 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Override inner to accommodate options full-width */
+.tlb-modal__inner {
+  flex-direction: column;
+}
+
+/* Full-width options + ATC sit outside the two-col header */
+.tlb-modal__panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.tlb-modal__inner {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  padding: 24px 24px 16px 20px;
+}
+
+.tlb-modal__options-wrap {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: none;
+}
+
+/* ---------- Option group ---------- */
+.tlb-modal__option-group {
+  margin-bottom: 16px;
+}
+
+.tlb-modal__option-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #111;
+  margin-bottom: 8px;
+  letter-spacing: 0;
+}
+
+/* ---------- Pills (color) ---------- */
+.tlb-modal__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid #111;
+}
+
+.tlb-modal__pill-li {
+  flex: 1;
+}
+
+.tlb-modal__pill {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-right: 1.5px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+  text-align: center;
+}
+
+.tlb-modal__pill-li:last-child .tlb-modal__pill {
+  border-right: none;
+}
+
+.tlb-modal__pill--selected {
+  background: #111;
+  color: #fff;
+}
+
+.tlb-modal__pill:hover:not(.tlb-modal__pill--selected) {
+  background: #f5f5f5;
+}
+
+.tlb-modal__pill--unavailable {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.tlb-modal__pill:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: -2px;
+}
+
+/* ---------- Select (size) ---------- */
+.tlb-modal__select-wrap {
+  position: relative;
+  border: 1.5px solid #d0d0d0;
+  background: #fff;
+}
+
+.tlb-modal__select {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111;
+  cursor: pointer;
+}
+
+.tlb-modal__select:focus {
+  outline: none;
+}
+
+.tlb-modal__select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #111;
+  pointer-events: none;
+}
+
+/* ---------- Availability / notice ---------- */
+.tlb-modal__availability {
+  font-size: 12px;
+  color: #c0392b;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.tlb-modal__availability:empty {
+  display: none;
+}
+
+.tlb-modal__notice {
+  font-size: 12px;
+  margin: 0;
+  padding: 6px 20px;
+  display: none;
+}
+
+.tlb-modal__notice--error {
+  color: #c0392b;
+  display: block;
+}
+
+.tlb-modal__notice--success {
+  color: #27ae60;
+  display: block;
+}
+
+/* ---------- Add to cart ---------- */
+.tlb-modal__atc-wrap {
+  padding: 16px 20px 24px;
+}
+
+.tlb-modal__atc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 17px 24px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.tlb-modal__atc:hover:not(:disabled) {
+  background: #333;
+}
+
+.tlb-modal__atc:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tlb-modal__atc:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.tlb-modal__atc-arrow {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.tlb-modal__atc:hover:not(:disabled) .tlb-modal__atc-arrow {
+  transform: translateX(4px);
+}
+
+@keyframes tlb-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tlb-modal__atc-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: tlb-spin 0.6s linear infinite;
+}
+
+/* ==========================================================
+   MOBILE (≤749px)
+   ========================================================== */
+@media (max-width: 749px) {
+  .tlb {
+    padding: 40px 0 60px;
+  }
+
+  .tlb__heading {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .tlb__grid {
+    grid-template-columns: repeat(var(--tlb-mobile-cols, 2), 1fr);
+  }
+
+  /* Modal full-width on mobile */
+  .tlb-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .tlb-modal__panel {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 0;
+  }
+}
+
+</style>
+{% comment %}
+  sections/tisso-lookbook.liquid
+  "Tisso Vison in the Wild" — Lookbook grid with + hotspot buttons.
+  Desktop: 3 cols | Mobile: 2 cols
+  Modal: product image + title/price/desc + variant pills + size dropdown + ATC
+{% endcomment %}
+
+{{ 'tisso-lookbook.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_title  = section.settings.section_title | default: 'Tisso vison in the wild'
+  assign desktop_cols   = section.settings.desktop_columns | default: 3
+  assign mobile_cols    = section.settings.mobile_columns  | default: 2
+  assign gap            = section.settings.grid_gap        | default: 4
+-%}
+
+<section
+  class="tlb"
+  id="shopify-section-{{ section.id }}"
+  style="--tlb-desktop-cols:{{ desktop_cols }};--tlb-mobile-cols:{{ mobile_cols }};--tlb-gap:{{ gap }}px;"
+>
+
+  {%- if section_title != blank -%}
+    <h2 class="tlb__heading">{{ section_title }}</h2>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+
+    <ul class="tlb__grid" role="list">
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'lookbook_item' -%}
+
+          {%- liquid
+            assign blk_image   = block.settings.image
+            assign blk_product = all_products[block.settings.product]
+
+            assign p_featured_image_url = ''
+            if blk_product != blank and blk_product.featured_image
+              assign p_featured_image_url = blk_product.featured_image | image_url: width: 800
+            endif
+
+            assign card_alt = ''
+            if blk_image and blk_image.alt != blank
+              assign card_alt = blk_image.alt
+            elsif blk_product != blank
+              assign card_alt = blk_product.title
+            endif
+
+            assign feat_alt = ''
+            if blk_product != blank and blk_product.featured_image
+              assign feat_alt = blk_product.featured_image.alt | default: blk_product.title
+            endif
+          -%}
+
+          {%- comment %} Build product JSON {%- endcomment %}
+          {%- if blk_product != blank -%}
+            {%- capture blk_product_json -%}
+              {
+                "id": {{ blk_product.id }},
+                "title": {{ blk_product.title | json }},
+                "description": {{ blk_product.description | json }},
+                "featured_image": {{ p_featured_image_url | json }},
+                "price": {{ blk_product.price }},
+                "price_formatted": {{ blk_product.price | money | json }},
+                "options_with_values": [
+                  {%- for option in blk_product.options_with_values -%}
+                    {
+                      "name": {{ option.name | json }},
+                      "position": {{ option.position }},
+                      "values": {{ option.values | json }}
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endfor -%}
+                ],
+                "variants": [
+                  {%- for variant in blk_product.variants -%}
+                    {
+                      "id": {{ variant.id }},
+                      "title": {{ variant.title | json }},
+                      "price": {{ variant.price }},
+                      "price_formatted": {{ variant.price | money | json }},
+                      "available": {{ variant.available }},
+                      "option1": {{ variant.option1 | json }},
+                      "option2": {{ variant.option2 | json }},
+                      "option3": {{ variant.option3 | json }}
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endfor -%}
+                ]
+              }
+            {%- endcapture -%}
+          {%- endif -%}
+
+          {%- liquid
+            assign card_img_url = ''
+            if blk_image != blank
+              assign card_img_url = blk_image | image_url: width: 800
+            elsif blk_product != blank and blk_product.featured_image
+              assign card_img_url = blk_product.featured_image | image_url: width: 800
+            endif
+
+            assign img_widths = '375,550,800'
+            assign img_sizes  = '(min-width: 990px) calc(100vw / ' | append: desktop_cols | append: '), calc(50vw - 8px)'
+          -%}
+
+          <li class="tlb__item" {{ block.shopify_attributes }}>
+            <div class="tlb__card">
+
+              {%- comment %} Photo {%- endcomment %}
+              {%- if blk_image != blank -%}
+                {{
+                  blk_image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: "lazy",
+                    class: "tlb__card-img",
+                    widths: img_widths,
+                    sizes: img_sizes,
+                    alt: card_alt
+                }}
+              {%- elsif blk_product != blank and blk_product.featured_image -%}
+                {{
+                  blk_product.featured_image
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: "lazy",
+                    class: "tlb__card-img",
+                    widths: img_widths,
+                    sizes: img_sizes,
+                    alt: feat_alt
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'tlb__card-img tlb__card-placeholder' }}
+              {%- endif -%}
+
+              {%- comment %} + Hotspot button {%- endcomment %}
+              {%- if blk_product != blank -%}
+                <button
+                  class="tlb__hotspot"
+                  type="button"
+                  aria-label="View {{ blk_product.title }}"
+                  data-product="{{ blk_product_json | strip | escape }}"
+                  data-image="{{ card_img_url | escape }}"
+                >
+                  <span aria-hidden="true">+</span>
+                </button>
+              {%- endif -%}
+
+            </div>
+          </li>
+
+        {%- endif -%}
+      {%- endfor -%}
+
+    </ul>
+
+  {%- else -%}
+    {%- if request.design_mode -%}
+      <p class="tlb__empty">Add lookbook items using the theme editor.</p>
+    {%- endif -%}
+  {%- endif -%}
+
+</section>
+
+{%- comment %} ── MODAL (one per page) ──────────────────────────── {%- endcomment %}
+{%- unless tlb_modal_rendered -%}
+  {%- assign tlb_modal_rendered = true -%}
+
+  <div
+    id="tlb-modal"
+    class="tlb-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Product details"
+    aria-hidden="true"
+  >
+    <div class="tlb-modal__overlay"></div>
+
+    <div class="tlb-modal__panel">
+
+      {%- comment %} Close {%- endcomment %}
+      <button class="tlb-modal__close" type="button" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M1 1L13 13M13 1L1 13" stroke="#111" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      {%- comment %} Top row: image + title/price/desc {%- endcomment %}
+      <div class="tlb-modal__inner">
+        <div class="tlb-modal__img-wrap">
+          <img class="tlb-modal__img" src="" alt="" loading="lazy" width="140" height="175">
+        </div>
+        <div class="tlb-modal__body">
+          <h2 class="tlb-modal__title"></h2>
+          <p class="tlb-modal__price" aria-live="polite" aria-atomic="true"></p>
+          <div class="tlb-modal__desc"></div>
+        </div>
+      </div>
+
+      {%- comment %} Options + ATC — full width below header {%- endcomment %}
+      <div class="tlb-modal__options" aria-label="Product options"></div>
+
+      <p class="tlb-modal__availability" aria-live="polite" aria-atomic="true"></p>
+      <p class="tlb-modal__notice" role="alert" aria-live="polite"></p>
+
+      <div class="tlb-modal__atc-wrap">
+        <button type="button" class="tlb-modal__atc" aria-label="Add to cart" disabled>
+          <span class="tlb-modal__atc-label">ADD TO CART</span>
+          <svg class="tlb-modal__atc-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path d="M1 6H19M19 6L14 1M19 6L14 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Tisso Lookbook",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Tisso vison in the wild"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap (px)",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lookbook_item",
+      "name": "Lookbook Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tisso Lookbook",
+      "blocks": [
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+<script>
+    /**
+ * tisso-lookbook.js
+ * Lookbook grid + modal with variant selection + Shopify ATC
+ * Pure Vanilla JS — zero dependencies
+ */
+(function () {
+  'use strict';
+
+  /* ── State ─────────────────────────────────────────────────── */
+  var currentProduct   = null;
+  var selectedOptions  = {};
+  var prevFocused      = null;
+
+  /* ── DOM refs ───────────────────────────────────────────────── */
+  var modal, overlay, closeBtn,
+      modalImg, modalTitle, modalPrice, modalDesc,
+      optionsWrap, atcBtn, atcLabel, atcArrow,
+      availEl, noticeEl;
+
+  /* ── Boot ───────────────────────────────────────────────────── */
+  function init() {
+    modal      = document.getElementById('tlb-modal');
+    if (!modal) return;
+
+    overlay    = modal.querySelector('.tlb-modal__overlay');
+    closeBtn   = modal.querySelector('.tlb-modal__close');
+    modalImg   = modal.querySelector('.tlb-modal__img');
+    modalTitle = modal.querySelector('.tlb-modal__title');
+    modalPrice = modal.querySelector('.tlb-modal__price');
+    modalDesc  = modal.querySelector('.tlb-modal__desc');
+    optionsWrap = modal.querySelector('.tlb-modal__options');
+    atcBtn     = modal.querySelector('.tlb-modal__atc');
+    atcLabel   = modal.querySelector('.tlb-modal__atc-label');
+    atcArrow   = modal.querySelector('.tlb-modal__atc-arrow');
+    availEl    = modal.querySelector('.tlb-modal__availability');
+    noticeEl   = modal.querySelector('.tlb-modal__notice');
+
+    /* Hotspot click listeners */
+    document.querySelectorAll('.tlb__hotspot').forEach(function (btn) {
+      btn.addEventListener('click', onHotspotClick);
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onHotspotClick.call(btn); }
+      });
+    });
+
+    if (overlay)  overlay.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+    });
+    modal.addEventListener('keydown', trapFocus);
+
+    if (atcBtn) atcBtn.addEventListener('click', onATC);
+  }
+
+  /* ── Hotspot click ──────────────────────────────────────────── */
+  function onHotspotClick() {
+    var raw = this.dataset.product;
+    if (!raw) return;
+    var product;
+    try { product = JSON.parse(raw); } catch (e) { return; }
+    if (!product || !product.id) return;
+
+    prevFocused = document.activeElement;
+    populate(product, this.dataset.image || '');
+    openModal();
+  }
+
+  /* ── Populate modal ─────────────────────────────────────────── */
+  function populate(product, cardImg) {
+    currentProduct  = product;
+    selectedOptions = {};
+    clearNotice();
+
+    /* Image */
+    var src = cardImg || product.featured_image || '';
+    if (modalImg) {
+      modalImg.src = src;
+      modalImg.alt = product.title || '';
+      modalImg.style.display = src ? '' : 'none';
+    }
+
+    /* Title / Price / Desc */
+    if (modalTitle) modalTitle.textContent = product.title || '';
+    if (modalDesc)  modalDesc.innerHTML    = product.description || '';
+    if (modalPrice) modalPrice.textContent = product.price_formatted || '';
+
+    /* Build option selectors */
+    buildOptions(product);
+
+    /* Pre-select first available variant */
+    var opts = product.options_with_values || [];
+    var firstAvail = (product.variants || []).find(function (v) { return v.available; }) || (product.variants || [])[0];
+    if (firstAvail && opts.length) {
+      opts.forEach(function (opt, idx) {
+        selectedOptions[opt.name] = firstAvail['option' + (idx + 1)];
+      });
+      refreshPills();
+      refreshVariantState();
+    }
+  }
+
+  /* ── Build option rows ──────────────────────────────────────── */
+  function buildOptions(product) {
+    /* 
+      The Figma modal shows options BELOW the image+body header row,
+      then an ATC button. We inject into .tlb-modal__options which
+      is inside .tlb-modal__panel but outside .tlb-modal__inner.
+    */
+    if (!optionsWrap) return;
+    optionsWrap.innerHTML = '';
+
+    /* Wrap to hold the styled option groups */
+    var wrap = document.createElement('div');
+    wrap.className = 'tlb-modal__options-wrap';
+
+    var opts = product.options_with_values || [];
+    opts.forEach(function (opt) {
+      var group = document.createElement('div');
+      group.className = 'tlb-modal__option-group';
+
+      var label = document.createElement('span');
+      label.className = 'tlb-modal__option-label';
+      label.textContent = opt.name;
+      group.appendChild(label);
+
+      var vals = opt.values || [];
+
+      /* Use pills for ≤6 values, select for more */
+      if (vals.length <= 6) {
+        var ul = document.createElement('ul');
+        ul.className = 'tlb-modal__pills';
+        ul.setAttribute('role', 'group');
+        ul.setAttribute('aria-label', opt.name);
+
+        vals.forEach(function (val) {
+          var li  = document.createElement('li');
+          li.className = 'tlb-modal__pill-li';
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'tlb-modal__pill';
+          btn.textContent = val;
+          btn.dataset.option = opt.name;
+          btn.dataset.value  = val;
+          btn.setAttribute('aria-label', opt.name + ': ' + val);
+
+          btn.addEventListener('click', function () {
+            selectedOptions[opt.name] = val;
+            refreshPills();
+            refreshVariantState();
+          });
+
+          li.appendChild(btn);
+          ul.appendChild(li);
+        });
+
+        group.appendChild(ul);
+      } else {
+        var selWrap = document.createElement('div');
+        selWrap.className = 'tlb-modal__select-wrap';
+
+        var sel = document.createElement('select');
+        sel.className = 'tlb-modal__select';
+        sel.setAttribute('aria-label', opt.name);
+        sel.dataset.option = opt.name;
+
+        var ph = document.createElement('option');
+        ph.value = ''; ph.disabled = true; ph.selected = true;
+        ph.textContent = 'Choose ' + opt.name;
+        sel.appendChild(ph);
+
+        vals.forEach(function (val) {
+          var o = document.createElement('option');
+          o.value = val; o.textContent = val;
+          sel.appendChild(o);
+        });
+
+        sel.addEventListener('change', function () {
+          selectedOptions[opt.name] = this.value;
+          refreshVariantState();
+        });
+
+        selWrap.appendChild(sel);
+        group.appendChild(selWrap);
+      }
+
+      wrap.appendChild(group);
+    });
+
+    /* ATC wrap */
+    var atcWrap = document.createElement('div');
+    atcWrap.className = 'tlb-modal__atc-wrap';
+    if (atcBtn) atcWrap.appendChild(atcBtn);
+    wrap.appendChild(atcWrap);
+
+    optionsWrap.appendChild(wrap);
+  }
+
+  /* ── Refresh pill selected / unavailable states ─────────────── */
+  function refreshPills() {
+    if (!optionsWrap || !currentProduct) return;
+    optionsWrap.querySelectorAll('.tlb-modal__pill').forEach(function (pill) {
+      var opt = pill.dataset.option;
+      var val = pill.dataset.value;
+      var isSelected = selectedOptions[opt] === val;
+      pill.classList.toggle('tlb-modal__pill--selected', isSelected);
+      pill.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+
+      /* Check if this combination would be unavailable */
+      var testOpts = Object.assign({}, selectedOptions);
+      testOpts[opt] = val;
+      var variant = findVariant(testOpts);
+      pill.classList.toggle('tlb-modal__pill--unavailable', variant ? !variant.available : false);
+    });
+  }
+
+  /* ── Find matching variant ──────────────────────────────────── */
+  function findVariant(opts) {
+    if (!currentProduct) return null;
+    var optDefs = currentProduct.options_with_values || [];
+    return (currentProduct.variants || []).find(function (v) {
+      return optDefs.every(function (def, idx) {
+        return opts[def.name] === undefined || v['option' + (idx + 1)] === opts[def.name];
+      });
+    }) || null;
+  }
+
+  /* ── Update price / availability / ATC state ────────────────── */
+  function refreshVariantState() {
+    if (!currentProduct) return;
+    clearNotice();
+
+    var variant = findVariant(selectedOptions);
+    var allSelected = (currentProduct.options_with_values || []).every(function (o) {
+      return selectedOptions[o.name] !== undefined;
+    });
+
+    /* Price */
+    if (modalPrice) {
+      modalPrice.textContent = variant
+        ? (variant.price_formatted || currentProduct.price_formatted || '')
+        : (currentProduct.price_formatted || '');
+    }
+
+    /* Availability */
+    if (availEl) {
+      if (variant && !variant.available) {
+        availEl.textContent = 'Sold out';
+      } else {
+        availEl.textContent = '';
+      }
+    }
+
+    /* ATC button */
+    if (atcBtn) {
+      var canAdd = allSelected && variant && variant.available;
+      atcBtn.disabled = !canAdd;
+      atcBtn.dataset.variantId = variant ? variant.id : '';
+    }
+  }
+
+  /* ── Add to cart ─────────────────────────────────────────────── */
+  function onATC() {
+    if (!atcBtn || atcBtn.disabled) return;
+    var variantId = parseInt(atcBtn.dataset.variantId, 10);
+    if (!variantId) return;
+
+    setLoading(true);
+    clearNotice();
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    })
+      .then(function (res) {
+        if (!res.ok) return res.json().then(function (d) { throw new Error(d.description || 'Error'); });
+        return res.json();
+      })
+      .then(function () {
+        setLoading(false);
+        showNotice('Item added to cart!', 'success');
+       // refreshDawnCart();
+      })
+      .catch(function (err) {
+        setLoading(false);
+        showNotice(err.message || 'Could not add to cart.', 'error');
+      });
+  }
+
+  /* ── Dawn cart refresh ──────────────────────────────────────── */
+  function refreshDawnCart() {
+    var sectionsToFetch = ['cart-drawer', 'cart-icon-bubble'];
+
+    fetch(window.Shopify.routes.root + '?sections=' + sectionsToFetch.join(','), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (sections) {
+
+        /* ── Update cart-icon-bubble (header cart count badge) ── */
+        var bubbleHtml = sections['cart-icon-bubble'];
+        if (bubbleHtml) {
+          var bubbleEl = document.getElementById('cart-icon-bubble');
+          if (bubbleEl) {
+            var tmp = document.createElement('div');
+            tmp.innerHTML = bubbleHtml;
+            var newBubble = tmp.querySelector('#cart-icon-bubble');
+            if (newBubble) bubbleEl.innerHTML = newBubble.innerHTML;
+          }
+        }
+
+        /* ── Update cart-drawer and open it ─────────────────── */
+        var drawerHtml = sections['cart-drawer'];
+        if (drawerHtml) {
+          var drawerEl = document.getElementById('cart-drawer');
+          if (drawerEl) {
+            var tmp2 = document.createElement('div');
+            tmp2.innerHTML = drawerHtml;
+            var newDrawer = tmp2.querySelector('#cart-drawer');
+            if (newDrawer) drawerEl.innerHTML = newDrawer.innerHTML;
+          }
+        }
+
+        /* ── Open the Dawn cart-drawer custom element ─────────── */
+        var cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer) {
+          /* Dawn's CartDrawer custom element exposes open() */
+          if (typeof cartDrawer.open === 'function') {
+            cartDrawer.open();
+          } else {
+            /* Fallback: dispatch the event Dawn listens for */
+            cartDrawer.dispatchEvent(new CustomEvent('cart-drawer:open'));
+          }
+        }
+      })
+      .catch(function (err) {
+        /* Soft fail — item was added, drawer just won't open */
+        console.warn('Tisso Lookbook: could not refresh Dawn cart drawer.', err);
+      });
+  }
+
+
+  /* ── Loading state ──────────────────────────────────────────── */
+  function setLoading(on) {
+    if (!atcBtn) return;
+    atcBtn.disabled = on;
+    var spinner = atcBtn.querySelector('.tlb-modal__atc-spinner');
+    if (on) {
+      if (atcLabel) atcLabel.textContent = 'Adding…';
+      if (atcArrow) atcArrow.style.display = 'none';
+      if (!spinner) {
+        var sp = document.createElement('span');
+        sp.className = 'tlb-modal__atc-spinner';
+        sp.setAttribute('aria-hidden', 'true');
+        atcBtn.appendChild(sp);
+      }
+    } else {
+      if (atcLabel) atcLabel.textContent = 'ADD TO CART';
+      if (atcArrow) atcArrow.style.display = '';
+      if (spinner) spinner.remove();
+    }
+  }
+
+  /* ── Notice ─────────────────────────────────────────────────── */
+  function showNotice(msg, type) {
+    if (!noticeEl) return;
+    noticeEl.textContent = msg;
+    noticeEl.className = 'tlb-modal__notice tlb-modal__notice--' + type;
+  }
+  function clearNotice() {
+    if (!noticeEl) return;
+    noticeEl.textContent = '';
+    noticeEl.className = 'tlb-modal__notice';
+  }
+
+  /* ── Open / close ───────────────────────────────────────────── */
+  function openModal() {
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { if (closeBtn) closeBtn.focus(); });
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    currentProduct = null; selectedOptions = {};
+    if (prevFocused && prevFocused.focus) prevFocused.focus();
+  }
+
+  /* ── Focus trap ─────────────────────────────────────────────── */
+  function trapFocus(e) {
+    if (e.key !== 'Tab') return;
+    if (!modal || modal.getAttribute('aria-hidden') !== 'false') return;
+    var focusable = Array.from(modal.querySelectorAll(
+      'button:not(:disabled),[href],input:not(:disabled),select:not(:disabled),[tabindex]:not([tabindex="-1"])'
+    ));
+    if (!focusable.length) return;
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
+  }
+
+  /* ── Start ──────────────────────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+
+</script>

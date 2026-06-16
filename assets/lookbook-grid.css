@@ -1,0 +1,457 @@
+/* ============================================================
+   lookbook-grid.css — Shopify Dawn Section
+   BEM naming: lookbook-grid / lookbook-card / lookbook-modal
+   ============================================================ */
+
+/* ---------- Section wrapper ---------- */
+.lookbook-grid {
+  padding-top: var(--lookbook-section-padding-top, 36px);
+  padding-bottom: var(--lookbook-section-padding-bottom, 36px);
+}
+
+.lookbook-grid__inner {
+  max-width: var(--page-width, 1200px);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ---------- Grid ---------- */
+.lookbook-grid__wrapper {
+  display: grid;
+  grid-template-columns: repeat(var(--lookbook-desktop-cols, 3), 1fr);
+  gap: var(--lookbook-gap, 16px);
+}
+
+/* ---------- Card ---------- */
+.lookbook-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #f4f4f4;
+  aspect-ratio: 3 / 4;
+  display: block;
+  /* remove default button styles */
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
+.lookbook-card:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.lookbook-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.lookbook-card:hover .lookbook-card__image,
+.lookbook-card:focus-visible .lookbook-card__image {
+  transform: scale(1.04);
+}
+
+/* subtle overlay on hover */
+.lookbook-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+  pointer-events: none;
+}
+
+.lookbook-card:hover::after {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Modal overlay ---------- */
+.lookbook-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lookbook-modal[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lookbook-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+}
+
+/* ---------- Modal content ---------- */
+.lookbook-modal__content {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overscroll-behavior: contain;
+}
+
+.lookbook-modal[aria-hidden="false"] .lookbook-modal__content {
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Modal image pane ---------- */
+.lookbook-modal__image-pane {
+  position: relative;
+  min-height: 360px;
+  background: #f4f4f4;
+}
+
+.lookbook-modal__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lookbook-modal__image-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+}
+
+.lookbook-modal__image-placeholder svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* ---------- Modal body pane ---------- */
+.lookbook-modal__body {
+  padding: 2rem 2rem 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ---------- Close button ---------- */
+.lookbook-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.lookbook-modal__close:hover {
+  background: #f0f0f0;
+}
+
+.lookbook-modal__close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.lookbook-modal__close svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+/* ---------- Product info ---------- */
+.lookbook-modal__title {
+  font-family: inherit;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--color-base-text, #121212);
+}
+
+.lookbook-modal__price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-base-text, #121212);
+  margin: 0;
+}
+
+.lookbook-modal__price--unavailable {
+  color: #888;
+  text-decoration: line-through;
+}
+
+.lookbook-modal__description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-base-text, #121212);
+  opacity: 0.75;
+  margin: 0;
+}
+
+.lookbook-modal__description p {
+  margin: 0 0 0.5em;
+}
+
+.lookbook-modal__description p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Variant options ---------- */
+.lookbook-modal__variants {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lookbook-modal__option-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: var(--color-base-text, #121212);
+}
+
+/* Pill / swatch options (for short option values) */
+.lookbook-modal__option-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lookbook-modal__option-pill {
+  padding: 0.375rem 0.875rem;
+  border: 1.5px solid #d4d4d4;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  background: #fff;
+  color: var(--color-base-text, #121212);
+  transition: border-color 0.15s ease, background 0.15s ease;
+  font-family: inherit;
+}
+
+.lookbook-modal__option-pill:hover {
+  border-color: #121212;
+}
+
+.lookbook-modal__option-pill--selected {
+  border-color: #121212;
+  background: #121212;
+  color: #fff;
+}
+
+.lookbook-modal__option-pill--unavailable {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.lookbook-modal__option-pill:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Dropdown for options with many values */
+.lookbook-modal__option-select {
+  width: 100%;
+  padding: 0.6875rem 2.5rem 0.6875rem 0.875rem;
+  border: 1.5px solid #d4d4d4;
+  border-radius: 2px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23121212' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center / 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--color-base-text, #121212);
+  transition: border-color 0.15s ease;
+}
+
+.lookbook-modal__option-select:hover,
+.lookbook-modal__option-select:focus {
+  border-color: #121212;
+  outline: none;
+}
+
+/* ---------- Availability notice ---------- */
+.lookbook-modal__availability {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #c0392b;
+  margin: 0;
+}
+
+.lookbook-modal__availability--in-stock {
+  color: #27ae60;
+}
+
+/* ---------- Add to cart button ---------- */
+.lookbook-modal__atc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.9375rem 1.5rem;
+  background: #121212;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, transform 0.15s ease;
+  margin-top: auto;
+}
+
+.lookbook-modal__atc:hover:not(:disabled) {
+  background: #333;
+}
+
+.lookbook-modal__atc:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lookbook-modal__atc:focus-visible {
+  outline: 2px solid #121212;
+  outline-offset: 3px;
+}
+
+.lookbook-modal__atc--loading {
+  pointer-events: none;
+}
+
+.lookbook-modal__atc-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.lookbook-modal__atc:hover:not(:disabled) .lookbook-modal__atc-icon {
+  transform: translateX(4px);
+}
+
+/* spinner for loading state */
+@keyframes lookbook-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lookbook-modal__atc-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lookbook-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ---------- Error/success notice ---------- */
+.lookbook-modal__notice {
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 2px;
+  display: none;
+}
+
+.lookbook-modal__notice--error {
+  background: #fff0f0;
+  color: #c0392b;
+  border: 1px solid #f5c6c6;
+  display: block;
+}
+
+.lookbook-modal__notice--success {
+  background: #f0fff4;
+  color: #27ae60;
+  border: 1px solid #b7e4c7;
+  display: block;
+}
+
+/* ---------- Empty state ---------- */
+.lookbook-modal__empty {
+  grid-column: 1 / -1;
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  font-size: 0.9375rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 749px) {
+  .lookbook-grid__wrapper {
+    grid-template-columns: repeat(var(--lookbook-mobile-cols, 2), 1fr);
+  }
+
+  .lookbook-modal__content {
+    grid-template-columns: 1fr;
+    max-height: 95vh;
+  }
+
+  .lookbook-modal__image-pane {
+    min-height: 240px;
+    aspect-ratio: 4 / 3;
+    position: relative;
+  }
+
+  .lookbook-modal__body {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .lookbook-modal__title {
+    font-size: 1.125rem;
+  }
+
+  .lookbook-modal__price {
+    font-size: 1rem;
+  }
+}
+
+/* ---------- Color scheme support (Dawn) ---------- */
+.color-scheme-1 .lookbook-grid {
+  --color-base-text: var(--color-foreground);
+  background: var(--color-background);
+}

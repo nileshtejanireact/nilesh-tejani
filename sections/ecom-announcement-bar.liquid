@@ -1,0 +1,148 @@
+<section
+  class="gift-bottom-bar color-{{ section.settings.color_scheme }}"
+  style="
+    --padding-top: {{ section.settings.padding_top }}px;
+    --padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="page-width">
+
+    {% for block in section.blocks %}
+      {% case block.type %}
+
+        {% when 'announcement' %}
+          <div
+            class="gift-bottom-bar__text text-{{ section.settings.text_alignment }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.text }}
+          </div>
+
+      {% endcase %}
+    {% endfor %}
+
+  </div>
+</section>
+
+<style>
+
+.gift-bottom-bar{
+  padding-top:var(--padding-top);
+  padding-bottom:var(--padding-bottom);
+  border-top:1px solid rgba(var(--color-foreground),.08);
+}
+
+.gift-bottom-bar__text{
+  font-size:1.4rem;
+  line-height:1.6;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.text-left{
+  text-align:left;
+}
+
+.text-center{
+  text-align:center;
+}
+
+.text-right{
+  text-align:right;
+}
+
+@media screen and (max-width:749px){
+
+  .gift-bottom-bar{
+    padding-top:16px;
+    padding-bottom:16px;
+  }
+
+  .gift-bottom-bar__text{
+    font-size:1.2rem;
+    line-height:1.5;
+    letter-spacing:.08em;
+  }
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Gift Bottom Bar",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 16,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Bottom Bar",
+      "blocks": [
+        {
+          "type": "announcement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
