@@ -279,7 +279,7 @@
       })
       .then(function () {
         setLoading(false);
-        showNotice('Item added to cart! <a href="/cart" class="tlb-modal__notice-link">View cart</a>', 'success');
+        showNotice('Item added to cart!', 'success');
        // refreshDawnCart();
       })
       .catch(function (err) {
