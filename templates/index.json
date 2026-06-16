@@ -1,5 +1,6 @@
 {
   "sections": {
+<<<<<<< HEAD
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -71,5 +72,14 @@
   "order": [
     "image_banner",
     "featured_collection"
+=======
+    "gift_guide_Gn9E63": {
+      "type": "gift-guide",
+      "settings": {}
+    }
+  },
+  "order": [
+    "gift_guide_Gn9E63"
+>>>>>>> 31153499f49a321ab97b8458c996fca8b97b8cae
   ]
 }
