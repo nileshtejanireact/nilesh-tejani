@@ -1,0 +1,324 @@
+{% doc %}
+  @prompt
+    Create a custom header section that matches this design: light beige/off-white background, "TISSO VISON" logo/brand name on the left, centered text "Find the ideal gift for your loved ones.", and a bold yellow button on the right with text "CHOOSE GIFT →". The header should be a single horizontal bar. On mobile, it should collapse into a hamburger menu icon, with the logo still visible, and the announcement text and button hidden or stacked below. Make the button text, announcement text, and colors customizable in theme settings.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-custom-header-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+  }
+
+  .ai-custom-header__container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-custom-header__logo-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    font-size: {{ block.settings.logo_font_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.logo_color }};
+    text-decoration: none;
+  }
+
+  .ai-custom-header__announcement-{{ ai_gen_id }} {
+    flex-grow: 1;
+    text-align: center;
+    font-size: {{ block.settings.announcement_font_size }}px;
+    color: {{ block.settings.announcement_color }};
+  }
+
+  .ai-custom-header__button-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_background_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 700;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-custom-header__button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_background_color }};
+  }
+
+  .ai-custom-header__mobile-menu-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-custom-header__hamburger-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ai-custom-header__hamburger-line-{{ ai_gen_id }} {
+    width: 24px;
+    height: 2px;
+    background-color: {{ block.settings.logo_color }};
+    transition: all 0.3s ease;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-custom-header__container-{{ ai_gen_id }} {
+      justify-content: space-between;
+    }
+
+    .ai-custom-header__announcement-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-custom-header__button-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-custom-header__mobile-menu-{{ ai_gen_id }} {
+      display: block;
+    }
+  }
+{% endstyle %}
+
+<custom-header-{{ ai_gen_id }} class="ai-custom-header-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-custom-header__container-{{ ai_gen_id }}">
+    <a href="{{ block.settings.logo_link }}" class="ai-custom-header__logo-{{ ai_gen_id }}">
+      {{ block.settings.logo_text }}
+    </a>
+
+    <div class="ai-custom-header__announcement-{{ ai_gen_id }}">
+      {{ block.settings.announcement_text }}
+    </div>
+
+    <a href="{{ block.settings.button_link }}" class="ai-custom-header__button-{{ ai_gen_id }}">
+      {{ block.settings.button_text }}
+    </a>
+
+    <div class="ai-custom-header__mobile-menu-{{ ai_gen_id }}">
+      <button class="ai-custom-header__hamburger-{{ ai_gen_id }}" aria-label="Open menu">
+        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
+        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
+        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
+      </button>
+    </div>
+  </div>
+</custom-header-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CustomHeader{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.hamburger = this.querySelector('.ai-custom-header__hamburger-{{ ai_gen_id }}');
+        
+        if (this.hamburger) {
+          this.hamburger.addEventListener('click', () => {
+            alert('Mobile menu functionality can be customized here');
+          });
+        }
+      }
+    }
+
+    customElements.define('custom-header-{{ ai_gen_id }}', CustomHeader{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom header",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F5F3EE"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "TISSO VISON"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Logo link"
+    },
+    {
+      "type": "range",
+      "id": "logo_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "logo_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Announcement"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "range",
+      "id": "announcement_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "announcement_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "CHOOSE GIFT →"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Background color",
+      "default": "#F4C430"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background_color",
+      "label": "Hover background color",
+      "default": "#E0B020"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom header"
+    }
+  ]
+}
+{% endschema %}
