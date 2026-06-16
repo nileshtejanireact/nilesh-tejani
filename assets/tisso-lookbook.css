@@ -1,0 +1,519 @@
+    /* ==========================================================
+   tisso-lookbook.css
+   Pixel-perfect to Figma: lookbook grid + product modal
+   ========================================================== */
+
+/* ---------- Reset ---------- */
+.tlb *,
+.tlb *::before,
+.tlb *::after,
+.tlb-modal *,
+.tlb-modal *::before,
+.tlb-modal *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   SECTION
+   ========================================================== */
+.tlb {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #fff;
+  padding: 60px 0 80px;
+}
+
+/* ---------- Heading ---------- */
+.tlb__heading {
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: #111;
+  text-align: center;
+  margin: 0 0 36px;
+  padding: 0 24px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+.tlb__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--tlb-desktop-cols, 3), 1fr);
+  gap: var(--tlb-gap, 4px);
+}
+
+/* ---------- Card ---------- */
+.tlb__item {
+  position: relative;
+  overflow: hidden;
+}
+
+.tlb__card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+
+.tlb__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tlb__card:hover .tlb__card-img {
+  transform: scale(1.04);
+}
+
+.tlb__card-placeholder {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+/* ---------- Hotspot + button ---------- */
+.tlb__hotspot {
+  position: absolute;
+  /* Default position — overrideable via block settings in future */
+  bottom: 28%;
+  left: 30%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1;
+  color: #111;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.tlb__hotspot:hover {
+  background: #fff;
+  border-color: #111;
+  transform: scale(1.1);
+}
+
+.tlb__hotspot:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.tlb__empty {
+  text-align: center;
+  color: #888;
+  padding: 40px;
+  font-size: 15px;
+}
+
+/* ==========================================================
+   MODAL OVERLAY
+   ========================================================== */
+.tlb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.tlb-modal[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tlb-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+/* ==========================================================
+   MODAL PANEL
+   ========================================================== */
+.tlb-modal__panel {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(10px) scale(0.985);
+  transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.tlb-modal[aria-hidden="false"] .tlb-modal__panel {
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Close button ---------- */
+.tlb-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.tlb-modal__close:hover svg path {
+  stroke: #555;
+}
+
+.tlb-modal__close:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+/* ---------- Inner layout: image left + body right ---------- */
+.tlb-modal__inner {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  padding: 24px 24px 24px 20px;
+  align-items: start;
+}
+
+/* ---------- Image ---------- */
+.tlb-modal__img-wrap {
+  width: 140px;
+  height: 175px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.tlb-modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* ---------- Body ---------- */
+.tlb-modal__body {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tlb-modal__title {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #111;
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.tlb-modal__price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.tlb-modal__desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #444;
+  margin: 0;
+}
+
+.tlb-modal__desc p {
+  margin: 0 0 4px;
+}
+
+/* ---------- Options section (below the image/body grid) ---------- */
+.tlb-modal__options {
+  grid-column: 1 / -1;
+  padding: 0 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Override inner to accommodate options full-width */
+.tlb-modal__inner {
+  flex-direction: column;
+}
+
+/* Full-width options + ATC sit outside the two-col header */
+.tlb-modal__panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.tlb-modal__inner {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  padding: 24px 24px 16px 20px;
+}
+
+.tlb-modal__options-wrap {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: none;
+}
+
+/* ---------- Option group ---------- */
+.tlb-modal__option-group {
+  margin-bottom: 16px;
+}
+
+.tlb-modal__option-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #111;
+  margin-bottom: 8px;
+  letter-spacing: 0;
+}
+
+/* ---------- Pills (color) ---------- */
+.tlb-modal__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid #111;
+}
+
+.tlb-modal__pill-li {
+  flex: 1;
+}
+
+.tlb-modal__pill {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-right: 1.5px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+  text-align: center;
+}
+
+.tlb-modal__pill-li:last-child .tlb-modal__pill {
+  border-right: none;
+}
+
+.tlb-modal__pill--selected {
+  background: #111;
+  color: #fff;
+}
+
+.tlb-modal__pill:hover:not(.tlb-modal__pill--selected) {
+  background: #f5f5f5;
+}
+
+.tlb-modal__pill--unavailable {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.tlb-modal__pill:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: -2px;
+}
+
+/* ---------- Select (size) ---------- */
+.tlb-modal__select-wrap {
+  position: relative;
+  border: 1.5px solid #d0d0d0;
+  background: #fff;
+}
+
+.tlb-modal__select {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111;
+  cursor: pointer;
+}
+
+.tlb-modal__select:focus {
+  outline: none;
+}
+
+.tlb-modal__select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #111;
+  pointer-events: none;
+}
+
+/* ---------- Availability / notice ---------- */
+.tlb-modal__availability {
+  font-size: 12px;
+  color: #c0392b;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.tlb-modal__availability:empty {
+  display: none;
+}
+
+.tlb-modal__notice {
+  font-size: 12px;
+  margin: 0;
+  padding: 6px 20px;
+  display: none;
+}
+
+.tlb-modal__notice--error {
+  color: #c0392b;
+  display: block;
+}
+
+.tlb-modal__notice--success {
+  color: #27ae60;
+  display: block;
+}
+
+/* ---------- Add to cart ---------- */
+.tlb-modal__atc-wrap {
+  padding: 16px 20px 24px;
+}
+
+.tlb-modal__atc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 17px 24px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.tlb-modal__atc:hover:not(:disabled) {
+  background: #333;
+}
+
+.tlb-modal__atc:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tlb-modal__atc:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.tlb-modal__atc-arrow {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.tlb-modal__atc:hover:not(:disabled) .tlb-modal__atc-arrow {
+  transform: translateX(4px);
+}
+
+@keyframes tlb-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tlb-modal__atc-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: tlb-spin 0.6s linear infinite;
+}
+
+/* ==========================================================
+   MOBILE (≤749px)
+   ========================================================== */
+@media (max-width: 749px) {
+  .tlb {
+    padding: 40px 0 60px;
+  }
+
+  .tlb__heading {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .tlb__grid {
+    grid-template-columns: repeat(var(--tlb-mobile-cols, 2), 1fr);
+  }
+
+  /* Modal full-width on mobile */
+  .tlb-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .tlb-modal__panel {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 0;
+  }
+}
