@@ -12,8 +12,8 @@
     "1781590442053d8b93": {
       "type": "_blocks",
       "blocks": {
-        "ai_gen_block_5e80e44_eEXRmW": {
-          "type": "ai_gen_block_5e80e44",
+        "custom_header_eEXRmW": {
+          "type": "custom-header",
           "settings": {
             "max_width": 1200,
             "padding_vertical": 16,
@@ -40,7 +40,7 @@
         }
       },
       "block_order": [
-        "ai_gen_block_5e80e44_eEXRmW"
+        "custom_header_eEXRmW"
       ],
       "settings": {}
     },

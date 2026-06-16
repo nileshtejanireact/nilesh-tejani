@@ -1,18 +1,14 @@
-{% doc %}
-  @prompt
-    Create a custom header section that matches this design: light beige/off-white background, "TISSO VISON" logo/brand name on the left, centered text "Find the ideal gift for your loved ones.", and a bold yellow button on the right with text "CHOOSE GIFT →". The header should be a single horizontal bar. On mobile, it should collapse into a hamburger menu icon, with the logo still visible, and the announcement text and button hidden or stacked below. Make the button text, announcement text, and colors customizable in theme settings.
-{% enddoc %}
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign block_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
-  .ai-custom-header-{{ ai_gen_id }} {
+  .custom-header-{{ block_id }} {
     display: block;
     width: 100%;
     background-color: {{ block.settings.background_color }};
     padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
   }
 
-  .ai-custom-header__container-{{ ai_gen_id }} {
+  .custom-header__container-{{ block_id }} {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,7 +17,7 @@
     margin: 0 auto;
   }
 
-  .ai-custom-header__logo-{{ ai_gen_id }} {
+  .custom-header__logo-{{ block_id }} {
     flex-shrink: 0;
     font-size: {{ block.settings.logo_font_size }}px;
     font-weight: 700;
@@ -29,14 +25,14 @@
     text-decoration: none;
   }
 
-  .ai-custom-header__announcement-{{ ai_gen_id }} {
+  .custom-header__announcement-{{ block_id }} {
     flex-grow: 1;
     text-align: center;
     font-size: {{ block.settings.announcement_font_size }}px;
     color: {{ block.settings.announcement_color }};
   }
 
-  .ai-custom-header__button-{{ ai_gen_id }} {
+  .custom-header__button-{{ block_id }} {
     flex-shrink: 0;
     padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
     background-color: {{ block.settings.button_background_color }};
@@ -49,15 +45,15 @@
     white-space: nowrap;
   }
 
-  .ai-custom-header__button-{{ ai_gen_id }}:hover {
+  .custom-header__button-{{ block_id }}:hover {
     background-color: {{ block.settings.button_hover_background_color }};
   }
 
-  .ai-custom-header__mobile-menu-{{ ai_gen_id }} {
+  .custom-header__mobile-menu-{{ block_id }} {
     display: none;
   }
 
-  .ai-custom-header__hamburger-{{ ai_gen_id }} {
+  .custom-header__hamburger-{{ block_id }} {
     background: none;
     border: none;
     cursor: pointer;
@@ -67,7 +63,7 @@
     gap: 4px;
   }
 
-  .ai-custom-header__hamburger-line-{{ ai_gen_id }} {
+  .custom-header__hamburger-line-{{ block_id }} {
     width: 24px;
     height: 2px;
     background-color: {{ block.settings.logo_color }};
@@ -75,57 +71,57 @@
   }
 
   @media screen and (max-width: 749px) {
-    .ai-custom-header__container-{{ ai_gen_id }} {
+    .custom-header__container-{{ block_id }} {
       justify-content: space-between;
     }
 
-    .ai-custom-header__announcement-{{ ai_gen_id }} {
+    .custom-header__announcement-{{ block_id }} {
       display: none;
     }
 
-    .ai-custom-header__button-{{ ai_gen_id }} {
+    .custom-header__button-{{ block_id }} {
       display: none;
     }
 
-    .ai-custom-header__mobile-menu-{{ ai_gen_id }} {
+    .custom-header__mobile-menu-{{ block_id }} {
       display: block;
     }
   }
 {% endstyle %}
 
-<custom-header-{{ ai_gen_id }} class="ai-custom-header-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-  <div class="ai-custom-header__container-{{ ai_gen_id }}">
-    <a href="{{ block.settings.logo_link }}" class="ai-custom-header__logo-{{ ai_gen_id }}">
+<custom-header-{{ block_id }} class="custom-header-{{ block_id }}" {{ block.shopify_attributes }}>
+  <div class="custom-header__container-{{ block_id }}">
+    <a href="{{ block.settings.logo_link }}" class="custom-header__logo-{{ block_id }}">
       {{ block.settings.logo_text }}
     </a>
 
-    <div class="ai-custom-header__announcement-{{ ai_gen_id }}">
+    <div class="custom-header__announcement-{{ block_id }}">
       {{ block.settings.announcement_text }}
     </div>
 
-    <a href="{{ block.settings.button_link }}" class="ai-custom-header__button-{{ ai_gen_id }}">
+    <a href="{{ block.settings.button_link }}" class="custom-header__button-{{ block_id }}">
       {{ block.settings.button_text }}
     </a>
 
-    <div class="ai-custom-header__mobile-menu-{{ ai_gen_id }}">
-      <button class="ai-custom-header__hamburger-{{ ai_gen_id }}" aria-label="Open menu">
-        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
-        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
-        <span class="ai-custom-header__hamburger-line-{{ ai_gen_id }}"></span>
+    <div class="custom-header__mobile-menu-{{ block_id }}">
+      <button class="custom-header__hamburger-{{ block_id }}" aria-label="Open menu">
+        <span class="custom-header__hamburger-line-{{ block_id }}"></span>
+        <span class="custom-header__hamburger-line-{{ block_id }}"></span>
+        <span class="custom-header__hamburger-line-{{ block_id }}"></span>
       </button>
     </div>
   </div>
-</custom-header-{{ ai_gen_id }}>
+</custom-header-{{ block_id }}>
 
 <script>
   (function() {
-    class CustomHeader{{ ai_gen_id }} extends HTMLElement {
+    class CustomHeader{{ block_id }} extends HTMLElement {
       constructor() {
         super();
       }
 
       connectedCallback() {
-        this.hamburger = this.querySelector('.ai-custom-header__hamburger-{{ ai_gen_id }}');
+        this.hamburger = this.querySelector('.custom-header__hamburger-{{ block_id }}';
         
         if (this.hamburger) {
           this.hamburger.addEventListener('click', () => {
@@ -135,13 +131,13 @@
       }
     }
 
-    customElements.define('custom-header-{{ ai_gen_id }}', CustomHeader{{ ai_gen_id }});
+    customElements.define('custom-header-{{ block_id }}', CustomHeader{{ block_id }});
   })();
 </script>
 
 {% schema %}
 {
-  "name": "Custom header",
+  "name": "Header Block",
   "tag": null,
   "settings": [
     {
