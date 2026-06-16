@@ -367,6 +367,16 @@
     if (!noticeEl) return;
     noticeEl.innerHTML = msg;
     noticeEl.className = 'tlb-modal__notice tlb-modal__notice--' + type;
+    
+    /* Handle click on dynamically added links */
+    var link = noticeEl.querySelector('a');
+    if (link) {
+      link.addEventListener('click', function (e) {
+        if (this.href) {
+          window.location.href = this.href;
+        }
+      });
+    }
   }
   function clearNotice() {
     if (!noticeEl) return;
